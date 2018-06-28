@@ -330,11 +330,7 @@ public class TweetButtonUtils {
 
         AppSettings settings = AppSettings.getInstance(context);
 
-        String retweets = status.getRetweetCount() == 1 ? context.getString(R.string.retweet).toLowerCase() : context.getString(R.string.new_retweets);
-        String likes = status.getFavoriteCount() == 1 ? context.getString(R.string.favorite).toLowerCase() : context.getString(R.string.new_favorites);
-        String tweetCount = status.getFavoriteCount() + " <b>" + likes + "</b>  " +
-                (!status.getUser().isProtected() ? status.getRetweetCount() + " <b>" + retweets + "</b> " : "");
-        tweetCounts.setText(Html.fromHtml(tweetCount));
+        tweetCounts.setText(Html.fromHtml("･｡*･ﾟ*｡･ﾟ･"));
 
         if (status.isRetweetedByMe()) {
             retweetButton.setImageResource(R.drawable.ic_action_repeat_dark);
