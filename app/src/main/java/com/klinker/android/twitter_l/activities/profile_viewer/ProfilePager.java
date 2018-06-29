@@ -477,10 +477,6 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
             verified.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
         }
 
-        if (user.isVerified()) {
-            verified.setVisibility(View.VISIBLE);
-        }
-
         View openFollowers = findViewById(R.id.followers_button);
         openFollowers.setVisibility(View.VISIBLE);
         TextView followersText = (TextView) findViewById(R.id.followers_text);

@@ -125,11 +125,6 @@ public class ProfilePeek extends SimpleOnPeek {
                             if (user.getLocation().isEmpty()) {
                                 location.setVisibility(View.GONE);
                             }
-
-                            if (user.isVerified()) {
-                                verified.setVisibility(View.VISIBLE);
-                                verified.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-                            }
                         }
                     });
 
