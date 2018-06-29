@@ -1,4 +1,6 @@
-# Talon for Twitter
+# (Statusless) Talon for Twitter
+
+This is a fork of Talon for Twitter that removes indications of status like verification badges and counts of retweets and followers.
 
 ![promo](promo/github/promo.png)
 
