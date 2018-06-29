@@ -458,17 +458,8 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
             }
         });
 
-        if (user.getFriendsCount() < 1000) {
-            followingCount.setText("" + user.getFriendsCount());
-        } else {
-            followingCount.setText("" + Utils.coolFormat(user.getFriendsCount(), 0));
-        }
-
-        if (user.getFollowersCount() < 1000) {
-            followerCount.setText("" + user.getFollowersCount());
-        } else {
-            followerCount.setText("" + Utils.coolFormat(user.getFollowersCount(),0));
-        }
+        followingCount.setText("*ﾟ･✧");
+        followerCount.setText("✧･ﾟ*");
 
         ImageView verified = (ImageView) findViewById(R.id.verified);
         if (settings.darkTheme) {

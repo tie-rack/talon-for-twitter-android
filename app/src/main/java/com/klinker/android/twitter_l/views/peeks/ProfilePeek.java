@@ -107,15 +107,9 @@ public class ProfilePeek extends SimpleOnPeek {
                             location.setText(user.getLocation());
                             description.setText(user.getDescription());
 
-                            followerCount.setText(
-                                    user.getFollowersCount() < 1000 ?
-                                            "" + user.getFollowersCount() :
-                                            Utils.coolFormat(user.getFollowersCount(), 0));
+                            followerCount.setText("✧･ﾟ*");
 
-                            friendCount.setText(
-                                    user.getFriendsCount() < 1000 ?
-                                            "" + user.getFriendsCount() :
-                                            Utils.coolFormat(user.getFriendsCount(), 0));
+                            friendCount.setText("*ﾟ･✧");
 
                             tweetCount.setText(
                                     user.getStatusesCount() < 1000 ?
