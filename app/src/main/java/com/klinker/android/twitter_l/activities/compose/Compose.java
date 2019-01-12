@@ -25,8 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,11 +41,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.os.Vibrator;
-import android.support.v13.view.inputmethod.InputConnectionCompat;
-import android.support.v13.view.inputmethod.InputContentInfoCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.util.Pair;
+import androidx.core.view.inputmethod.InputConnectionCompat;
+import androidx.core.view.inputmethod.InputContentInfoCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.util.Pair;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -918,6 +916,7 @@ public abstract class Compose extends Activity implements
             options.setActiveWidgetColor(settings.themeColors.accentColor);
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
             options.setCompressionQuality(100);
+            options.setFreeStyleCropEnabled(true);
 
             File destination = File.createTempFile("ucrop", "jpg", getCacheDir());
             UCrop.of(sourceUri, Uri.fromFile(destination))
@@ -1154,7 +1153,7 @@ public abstract class Compose extends Activity implements
                 User user = twitter.showUser(sendTo);
                 MessageData data = new MessageData(user.getId(), status);
 
-                if (!attachedUri.equals("")) {
+                if (!attachedUri[0].equals("")) {
                     try {
                         File f;
 
@@ -1169,12 +1168,7 @@ public abstract class Compose extends Activity implements
                         data.setMediaId(media.getMediaId());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        runOnUiThread(() -> Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show());
                     }
 
                 }

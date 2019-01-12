@@ -1,1 +1,1 @@
-You can now disable the hashtag auto complete, by going to Other Options, in settings.
+When you are viewing an picture from the list of images on a user's profile, you can now tap the "info" button at the top of the screen to quickly access the details for the associated tweet.

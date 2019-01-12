@@ -30,8 +30,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.*;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -85,7 +85,7 @@ public class DirectMessageConversation extends WhiteToolbarActivity {
     private Context context;
     private SharedPreferences sharedPrefs;
 
-    private android.support.v7.app.ActionBar actionBar;
+    private androidx.appcompat.app.ActionBar actionBar;
 
     private ListView listView;
     private FontPrefEditText composeBar;
@@ -341,21 +341,13 @@ public class DirectMessageConversation extends WhiteToolbarActivity {
                         data.setMediaId(media.getMediaId());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        runOnUiThread(() -> Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show());
                     }
 
                 }
 
                 DirectMessageEvent message = twitter.createMessage(data);
-
-                if (!settings.pushNotifications) {
-                    DMDataSource.getInstance(context).createSentDirectMessage(message, user, settings, settings.currentAccount);
-                }
+                DMDataSource.getInstance(context).createSentDirectMessage(message, user, settings, settings.currentAccount);
 
                 sharedPrefs.edit().putLong("last_direct_message_id_" + sharedPrefs.getInt("current_account", 1), message.getId()).apply();
                 sharedPrefs.edit().putBoolean("refresh_me_dm", true).apply();
@@ -526,6 +518,7 @@ public class DirectMessageConversation extends WhiteToolbarActivity {
             options.setActiveWidgetColor(settings.themeColors.accentColor);
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
             options.setCompressionQuality(100);
+            options.setFreeStyleCropEnabled(true);
 
             File destination = File.createTempFile("ucrop", "jpg", getCacheDir());
             UCrop.of(sourceUri, Uri.fromFile(destination))

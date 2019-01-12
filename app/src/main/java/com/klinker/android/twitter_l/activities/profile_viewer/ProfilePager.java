@@ -21,10 +21,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,7 +50,6 @@ import com.klinker.android.twitter_l.adapters.TimeLineCursorAdapter;
 import com.klinker.android.twitter_l.data.ThemeColor;
 import com.klinker.android.twitter_l.data.sq_lite.FavoriteUsersDataSource;
 import com.klinker.android.twitter_l.data.sq_lite.FollowersDataSource;
-import com.klinker.android.twitter_l.services.TalonPullNotificationService;
 import com.klinker.android.twitter_l.settings.AppSettings;
 import com.klinker.android.twitter_l.utils.IOUtils;
 import com.klinker.android.twitter_l.utils.MySuggestionsProvider;
@@ -103,7 +102,11 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
     private static final int LOAD_CAPACITY_PER_LIST = 20;
 
     public static void start(Context context, User user) {
-        start(context, user.getName(), user.getScreenName(), user.getOriginalProfileImageURL());
+        try {
+            start(context, user.getName(), user.getScreenName(), user.getOriginalProfileImageURL());
+        } catch (StringIndexOutOfBoundsException e) {
+            start(context, user.getName(), user.getScreenName(), user.getProfileImageURL());
+        }
     }
 
     public static void start(Context context, String screenname) {
@@ -736,9 +739,9 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
                         // put in the banner and profile pic to shared prefs
                         sharedPrefs.edit().putString("profile_pic_url_" + settings.currentAccount, thisUser.getOriginalProfileImageURL()).apply();
                         sharedPrefs.edit().putString("twitter_background_url_" + settings.currentAccount, thisUser.getProfileBannerURL()).apply();
-                        isMuffled = sharedPrefs.getStringSet("muffled_users", new HashSet<String>()).contains(screenName);
-                        isMuted = sharedPrefs.getString("muted_users", "").contains(screenName);
-                        isRTMuted = sharedPrefs.getString("muted_rts", "").contains(screenName);
+                        isMuffled = sharedPrefs.getStringSet("muffled_users", new HashSet<>()).contains(screenName);
+                        isMuted = sharedPrefs.getString("muted_users", "").toLowerCase().contains(screenName.toLowerCase());
+                        isRTMuted = sharedPrefs.getString("muted_rts", "").toLowerCase().contains(screenName.toLowerCase());
                     }
                 } else {
                     try {
@@ -749,8 +752,8 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
                         isFollowing = friendship.isSourceFollowingTarget();
                         followingYou = friendship.isTargetFollowingSource();
                         isBlocking = friendship.isSourceBlockingTarget();
-                        isMuted = sharedPrefs.getString("muted_users", "").contains(screenName);
-                        isRTMuted = sharedPrefs.getString("muted_rts", "").contains(screenName);
+                        isMuted = sharedPrefs.getString("muted_users", "").toLowerCase().contains(screenName.toLowerCase());
+                        isRTMuted = sharedPrefs.getString("muted_rts", "").toLowerCase().contains(screenName.toLowerCase());
                         isMuffled = sharedPrefs.getStringSet("muffled_users", new HashSet<String>()).contains(screenName);
                         isFavorite = FavoriteUsersDataSource.getInstance(context).isFavUser(otherUserName);
 
@@ -1058,11 +1061,6 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
                 }
             } else {
                 Toast.makeText(context, getResources().getString(R.string.error) + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            if(settings.liveStreaming) {
-                context.sendBroadcast(new Intent("com.klinker.android.twitter.STOP_PUSH_SERVICE"));
-                TalonPullNotificationService.start(context);
             }
 
             new GetActionBarInfo().execute();
@@ -1712,6 +1710,7 @@ public class ProfilePager extends WhiteToolbarActivity implements DragDismissDel
             options.setActiveWidgetColor(settings.themeColors.accentColor);
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
             options.setCompressionQuality(90);
+            options.setFreeStyleCropEnabled(true);
 
             File destination = File.createTempFile("ucrop", "jpg", getCacheDir());
             UCrop.of(sourceUri, Uri.fromFile(destination))

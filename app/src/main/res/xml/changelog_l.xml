@@ -1,5 +1,38 @@
 <changelog>
 
+    <version name="7.5.4">
+        <text>Translation updates</text>
+    </version>
+
+    <version name="7.5.3">
+        <text>Improve load times of the article previews on the timeline</text>
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.2">
+        <text>Bug fixes and build process improvements</text>
+    </version>
+
+    <version name="7.5.1">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.0">
+        <text>Open tweet details when looking through a users list of images on their profiles.</text>
+        <text>Improvements to handling tweets with multiple images</text>
+        <text>Dependency updates and bug fixes</text>
+    </version>
+
+    <version name="7.4.1">
+        <text>Twitter is shutting down their streaming services. I have removed Talon Pull from the app, as it will no longer work.</text>
+        <text>Other updates to work with the latest Twitter APIs.</text>
+    </version>
+
+    <version name="7.4.0">
+        <text>Crop images with a custom aspect ratio, instead of the pre-defined ratios</text>
+        <text>Save images on Android P beta</text>
+    </version>
+
     <version name="7.3.1">
         <text>Improvements around scheduled tweets</text>
     </version>

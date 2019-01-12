@@ -3,9 +3,8 @@ package com.klinker.android.twitter_l.activities.media_viewer.image
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.klinker.android.twitter_l.R
 import android.content.Intent
@@ -21,17 +19,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.*
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import android.os.Environment.getExternalStorageDirectory
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.klinker.android.twitter_l.BuildConfig
 import com.klinker.android.twitter_l.settings.AppSettings
 import com.klinker.android.twitter_l.utils.*
 import com.klinker.android.twitter_l.utils.api_helper.TwitterDMPicHelper
-import xyz.klinker.android.article.ImageViewActivity
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -110,7 +106,7 @@ class ImageFragment : Fragment() {
             } catch (e: Exception) { }
 
 
-            return url ?: ""
+            return url?.replace("http://", "https://") ?: ""
         }
     }
 
@@ -126,7 +122,7 @@ class ImageFragment : Fragment() {
 
 
     fun downloadImage() {
-        TimeoutThread({
+        TimeoutThread {
             Looper.prepare()
             val url = getLink(arguments)
 
@@ -175,8 +171,8 @@ class ImageFragment : Fragment() {
 
                 var uri = IOUtils.saveImage(bitmap, name, activity)
                 val root = Environment.getExternalStorageDirectory().toString()
-                val myDir = File(root + "/Talon")
-                val file = File(myDir, name + ".jpg")
+                val myDir = File("$root/Talon")
+                val file = File(myDir, "$name.jpg")
 
                 try {
                     uri = FileProvider.getUriForFile(activity,
@@ -204,13 +200,13 @@ class ImageFragment : Fragment() {
                 mNotificationManager.notify(randomId, builder2.build())
             } catch (e: Exception) {
                 e.printStackTrace()
-                activity.runOnUiThread({
+                activity.runOnUiThread {
                     try {
                         PermissionModelUtils(activity).showStorageIssue(e)
                     } catch (x: Exception) {
                         e.printStackTrace()
                     }
-                })
+                }
 
                 try {
                     val builder2 = NotificationCompat.Builder(activity, NotificationChannelUtil.MEDIA_DOWNLOAD_CHANNEL)
@@ -225,7 +221,7 @@ class ImageFragment : Fragment() {
                 } catch (x: IllegalStateException) {
                 }
             }
-        }).start()
+        }.start()
     }
 
     fun shareImage() {
@@ -240,7 +236,7 @@ class ImageFragment : Fragment() {
                         .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                         .get()
 
-                activity.runOnUiThread({
+                activity.runOnUiThread {
                     // create the intent
                     val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
                     sharingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -252,7 +248,7 @@ class ImageFragment : Fragment() {
 
                     // start the chooser
                     activity.startActivity(Intent.createChooser(sharingIntent, activity.getString(R.string.menu_share) + ": "))
-                })
+                }
             } catch (e: Exception) {
 
             }
